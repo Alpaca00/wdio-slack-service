@@ -7,9 +7,9 @@ class SlackService {
         this.options = options;
         this.caps = caps;
         this.config = config;
-        this.webhook = this.options.webHookUrl 
-                        ? new IncomingWebhook(this.options.webHookUrl) 
-                        : (function() { 
+        this.webhook = this.options.webHookUrl
+                        ? new IncomingWebhook(this.options.webHookUrl)
+                        : (function() {
                             console.error(`[slack-error]: Slack webhook URL is not defined`);
                             return;
                         })();
@@ -69,7 +69,7 @@ class SlackService {
             if(retries.attempts === retries.limit || retries.limit === 0) {
                 let errorMessage;
                 if(error.matcherResult) {
-                    errorMessage = error.matcherResult.message();
+                    errorMessage = 'ERROR';
                 } else {
                     errorMessage = error.toString();
                 }
@@ -86,9 +86,9 @@ class SlackService {
             ++this.passedSteps;
             this.attachment.push(passedAttachment({ title: this.testTitle, _currentRetry: retries.attempts }, { duration }));
         }
-        
+
     }
-    
+
     afterTest(test, context, results) {
         ++this.tests;
         this.testTitle = test.title;
@@ -98,7 +98,7 @@ class SlackService {
             if(test._currentRetry === test._retries || test._retries === -1) {
                 let errorMessage;
                 if(results.error.matcherResult) {
-                    errorMessage = results.error.matcherResult.message();
+                    errorMessage = 'ERROR';
                 } else {
                     errorMessage = results.error.toString();
                 }
@@ -123,7 +123,7 @@ class SlackService {
         if(this.steps === 0) {
             this.attachment.push({
                 color: `#dc3545`,
-                author_name: `This scenario was failed before entering into steps`, 
+                author_name: `This scenario was failed before entering into steps`,
                 footer: `Please check the execution log for more details`,
                 footer_icon: `https://www.pinclipart.com/picdir/big/31-316209_circle-x-clipart-reject-icon-png-download.png`,
                 ts: Date.now()
@@ -135,7 +135,7 @@ class SlackService {
         });
         this.steps = 0, this.passedSteps = 0, this.failedSteps = 0;
     }
-    
+
     async after() {
         if(this.config.framework === `cucumber`) {
             this.attachment.push({
